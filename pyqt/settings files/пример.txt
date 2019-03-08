@@ -1,0 +1,10 @@
+Url
+
+Price
+Block of price
+
+Blocks of phonenumbers
+Number of Blocks
+
+Block of Location
+Number of Blocks
