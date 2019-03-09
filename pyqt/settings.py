@@ -155,6 +155,7 @@ class SettingsScrapper(QWidget):
         self.PhoneNumbers = ''
         self.Price = ''
         self.Place = ''
+        self.Metro = ''
         nameBlockPhone = []
         numberBlockPhone = []
         nameBlockPrice = []
