@@ -17,8 +17,13 @@ from scrap import (Scrap,
 class SettingsScrapper(QWidget):
     soup = ""
     PhoneNumbers = "PhoneNumbers: "
+   # PhoneNumbers = ""
     Price = "Price: "
+    #Price = ""
     Place = "Adress: "
+    #Place = ""
+    Metro = "Metro: "
+    #Metro = ""
 
     def __init__(self):
         super().__init__()
@@ -47,6 +52,10 @@ class SettingsScrapper(QWidget):
         self.Label5.move(20, 262)
         self.Label6 = QLabel('NumberBlockPlace:', self)
         self.Label6.move(20, 312)
+        self.Label7 = QLabel('NameBlockMetro:', self)
+        self.Label7.move(20, 362)
+        self.Label8 = QLabel('NumberBlockMetro:', self)
+        self.Label8.move(20, 412)
 
         self.text = QTextEdit(self)
         self.text.resize(400,400)
@@ -69,6 +78,10 @@ class SettingsScrapper(QWidget):
         self.nameblockplace.move(20,282)
         self.numberblockplace = QLineEdit(self)
         self.numberblockplace.move(20,332)
+        self.nameblockmetro = QLineEdit(self)
+        self.nameblockmetro.move(20,382)
+        self.numberblockmetro = QLineEdit(self)
+        self.numberblockmetro.move(20,432)
         
         self.setGeometry(150, 150, 600, 620)
         self.setWindowTitle('Настройка скрапера')
@@ -80,8 +93,7 @@ class SettingsScrapper(QWidget):
         Url = self.url.text()
         
         print(Url)
-        NameBlockPhone = self.nameblockphone.text()
-        nameBlockPhone = NameBlockPhone.split(",")
+        nameBlockPhone = (self.nameblockphone.text()).split(",")
         print(nameBlockPhone)
         numberBlockPhone = (self.numberblockphone.text()).split(",")
         NumberBlockPhone = []
@@ -94,14 +106,9 @@ class SettingsScrapper(QWidget):
             for n in range(0, len(numberBlockPhone)):
                 a = ((Scrap(self.soup, nameBlockPhone[i], int(NumberBlockPhone[n]))).replace(" ", "")).replace("\xa0", "")
                 self.PhoneNumbers = self.PhoneNumbers + a + " "
-        #self.text.append(self.PhoneNumbers)
         self.textEdit(self.PhoneNumbers)
 #=======================РАБОТА НАД НОМЕРАМИ ТУТ ЗАКАНЧИВАЕТСЯ=====================
-        
-        
-        NameBlockPrice = self.nameblockprice.text()
-        nameBlockPrice = NameBlockPrice.split(",")
-        print(NameBlockPrice)
+        nameBlockPrice = (self.nameblockprice.text()).split(",")
         numberBlockPrice = (self.numberblockprice.text()).split(",")
         NumberBlockPrice = []
         for i in range(0, len(numberBlockPrice)):
@@ -111,10 +118,8 @@ class SettingsScrapper(QWidget):
             for n in range(0, len(numberBlockPrice)):
                 a = ((Scrap(self.soup, nameBlockPrice[i], int(NumberBlockPrice[n]))).replace(" ", "")).replace("\xa0", "").replace("рублей", "")
                 self.Price = self.Price + a + " "
-        #self.text.append(self.Price)
         self.textEdit(self.Price)
 #=======================РАБОТА НАД ЦЕННИКОМ ТУТ ЗАКАНЧИВАЕТСЯ=====================
-
         NameBlockPlace = []
         NameBlockPlace.append(self.nameblockplace.text())
         numberBlockPlace = (self.numberblockplace.text()).split(",")
@@ -126,11 +131,38 @@ class SettingsScrapper(QWidget):
             for n in range(0, len(NumberBlockPlace)):
                 a =  Scrap(self.soup, NameBlockPlace[i], int(NumberBlockPlace[n]))
                 self.Place = self.Place + a + " "
-        self.text.append(self.Place)
+        self.textEdit(self.Place)
 #============================РАБОТА НАД АДРЕСОМ ЗАКОНЧЕНА========================
+        NameBlockMetro = (self.nameblockmetro.text()).split(',')
+        numberBlockMetro = (self.numberblockmetro.text()).split(',')
+        NumberBlockMetro = []
+        for i in range(0, len(numberBlockMetro)):
+            NumberBlockMetro.append(int(numberBlockMetro[i]))
+#====================================ДЛЯ МЕТРО====================================
+        for i in range(0, len(NameBlockMetro)):
+            for n in range(0, len(NumberBlockMetro)):
+                a = Scrap(self.soup, NameBlockMetro[i], NumberBlockMetro[n])
+                self.Metro = self.Metro + a + " "
+        self.textEdit(self.Metro)
+#=============================РАБОТА НАД МЕТРО ЗАКОНЧЕНА=========================
+        self.Clear()
 
     def Save(self):
         NewFile = open()
+
+
+    def Clear(self):
+        self.PhoneNumbers = ''
+        self.Price = ''
+        self.Place = ''
+        nameBlockPhone = []
+        numberBlockPhone = []
+        nameBlockPrice = []
+        numberBlockPrice = []
+        NameBlockPlace = []
+        numberBlockPlace = []
+        NameBlockMetro = []
+        NumberBlockMetro = []
 
     def textEdit(self, string):
         self.text.append(string)
