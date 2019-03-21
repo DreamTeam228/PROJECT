@@ -3,11 +3,13 @@
 #|====================НЕ ТРОГАТЬ====================
 #|                                              DON'T TOUCH
 #+==================================================
-from PyQt5.QtWidgets import (QWidget, 
+#control-shift-p
+from PyQt5.QtWidgets import (QWidget,
                                                                QPushButton, 
                                                                QLineEdit, 
                                                                QInputDialog, 
                                                                QApplication, 
+                                                               QComboBox,
                                                                QTextEdit, 
                                                                QLabel)
 import sys
@@ -31,10 +33,19 @@ class SettingsScrapper(QWidget):
         
     def initUI(self):      
 
-        self.btn = QPushButton('Run', self)
-        self.btn.move(20, 580)
+        self.btn0 = QPushButton('Run', self)
+        self.btn0.move(20, 580)
+        self.btn0.resize(90, 25)
         self.btn1 = QPushButton('Save', self)
-        self.btn1.move(110, 580)
+        self.btn1.move(120, 580)
+        self.btn1.resize(90, 25)
+        self.btn2 = QPushButton('Load', self)
+        self.btn2.move(535, 555)
+        self.btn2.resize(90, 50)
+
+        self.LoadBox = QComboBox(self)
+        self.LoadBox.move(225, 555)
+        self.LoadBox.resize(300, 50)
 
         self.Label = QLabel('Url:', self)
         self.Label.move(20, 12)
@@ -60,43 +71,60 @@ class SettingsScrapper(QWidget):
         self.Label10.move(20, 512)
 
         self.text = QTextEdit(self)
-        self.text.resize(400,400)
-        self.text.move(185,20)
+        self.text.resize(400,515)
+        self.text.move(225,20)
 
-        self.btn.clicked.connect(self.RunScrap)
+        self.LoadSites()
+
+        self.btn0.clicked.connect(self.RunScrap)
         self.btn1.clicked.connect(self.Save)
+        self.btn2.clicked.connect(self.LoadInfo)
+
+        Long = 190
+        Wight = 25
         
         self.url = QLineEdit(self)
         self.url.move(20, 32)
+        self.url.resize(Long, Wight)
+
         self.nameblockphone = QLineEdit(self)
         self.nameblockphone.move(20, 82)
+        self.nameblockphone.resize(Long, Wight)
         self.numberblockphone = QLineEdit(self)
         self.numberblockphone.move(20, 132)
+        self.numberblockphone.resize(Long, Wight)
 
         self.nameblockprice = QLineEdit(self)
         self.nameblockprice.move(20,182)
+        self.nameblockprice.resize(Long, Wight)
         self.numberblockprice = QLineEdit(self)
         self.numberblockprice.move(20,232)
+        self.numberblockprice.resize(Long, Wight)
 
         self.nameblockplace = QLineEdit(self)
         self.nameblockplace.move(20,282)
+        self.nameblockplace.resize(Long, Wight)
         self.numberblockplace = QLineEdit(self)
         self.numberblockplace.move(20,332)
+        self.numberblockplace.resize(Long, Wight)
 
         self.nameblockmetro = QLineEdit(self)
         self.nameblockmetro.move(20,382)
+        self.nameblockmetro.resize(Long, Wight)
         self.numberblockmetro = QLineEdit(self)
         self.numberblockmetro.move(20,432)
+        self.numberblockmetro.resize(Long, Wight)
 
         self.nameblockdescription = QLineEdit(self)
         self.nameblockdescription.move(20,482)
+        self.nameblockdescription.resize(Long, Wight)
         self.numberblockdescription = QLineEdit(self)
         self.numberblockdescription.move(20, 532)
+        self.numberblockdescription.resize(Long, Wight)
         
-        self.setGeometry(150, 150, 600, 620)
+        self.setGeometry(150, 150, 645, 620)
         self.setWindowTitle('Настройка скрапера')
         self.show()
-        
         
     def RunScrap(self):
         self.text.setText('')
@@ -185,8 +213,8 @@ class SettingsScrapper(QWidget):
         settings = 'settings'
         settings = path + settings + '/'
         path = path + Path + '/'
-        current_place = path + self.url.text().replace('https:', '').replace('http:', '').replace('www.', '').replace('/', '')
-        settings_place = settings + self.url.text().replace('https:', '').replace('http:', '').replace('www.', '').replace('/', '')
+        current_place = path + self.url.text().replace('https:', '').replace('http:', '').replace('www.', '').replace('/', '').replace('/n', '')
+        settings_place = settings + self.url.text().replace('https:', '').replace('http:', '').replace('www.', '').replace('/', '').replace('/n', '')
         current_place = current_place + '/'
         settings_place = settings_place + '/'
 
@@ -266,6 +294,36 @@ class SettingsScrapper(QWidget):
         File.write(str(text))
         File.close()
 
+    def Load(self, string):
+        f = open(string, "r")
+        text = f.read()
+        return text
+
+    def LoadInfo(self):
+        path = os.getcwd() + '/' + 'settings' + '/' + self.LoadBox.currentText() + '/'
+
+        self.url.setText(self.Load(path + 'Url.txt'))
+
+        self.numberblockprice.setText(self.Load(path + 'numberblockprice.txt'))
+        self.nameblockprice.setText(self.Load(path + 'nameblockprice.txt'))
+
+        self.numberblockphone.setText(self.Load(path + 'numberblockphone.txt'))
+        self.nameblockphone.setText(self.Load(path + 'nameblockphone.txt'))
+
+        self.numberblockplace.setText(self.Load(path + 'numberblockplace.txt'))
+        self.nameblockplace.setText(self.Load(path + 'nameblockplace.txt'))
+
+        self.numberblockmetro.setText(self.Load(path + 'numberblockmetro.txt'))
+        self.nameblockmetro.setText(self.Load(path + 'nameblockmetro.txt'))
+        
+        self.numberblockdescription.setText(self.Load(path + 'numberblockdescription.txt'))
+        self.nameblockdescription.setText(self.Load(path + 'nameblockdescription.txt'))
+
+    def LoadSites(self):
+        path = os.getcwd() + '/' + 'sites/'
+        p = os.listdir(path)
+        self.LoadBox.addItems(p)
+
     def Clear(self):
         self.PhoneNumbers = ''
         self.Price = ''
@@ -275,8 +333,6 @@ class SettingsScrapper(QWidget):
 
     def textEdit(self, string):
         self.text.append(string)
-        
-        
 
 if __name__ == '__main__':
     
